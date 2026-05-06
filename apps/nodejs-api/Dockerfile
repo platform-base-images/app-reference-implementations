@@ -4,7 +4,7 @@ FROM ghcr.io/platform-images/nodejs-base:1.0.0@sha256:c894dd3a20d57013311dac55e4
 USER root
 WORKDIR /app
 COPY package*.json ./
-RUN npm ci --only=production
+RUN npm ci --omit=dev
 
 # Runtime stage — no shell, minimal attack surface
 FROM ghcr.io/platform-images/nodejs-base:1.0.0-distroless
