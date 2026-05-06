@@ -8,16 +8,34 @@
   "commitMessagePrefix": "chore(deps): ",
   "labels": ["renovate", "dependencies"],
   "ignoreDeps": ["docker/dockerfile"],
+  "pinDigests": true,
+  "hostRules": [
+    {
+      "matchHost": "ghcr.io",
+      "hostType": "docker",
+      "username": "x-access-token",
+      "password": "{{ secrets.RENOVATE_TOKEN }}"
+    }
+  ],
   "packageRules": [
     {
-      "description": "Chainguard base image digest bumps — auto-merge",
+      "description": "Platform base image digest bumps — auto-merge",
       "matchManagers": ["dockerfile"],
       "matchPackagePatterns": ["^ghcr\\.io/platform-images/"],
+      "matchUpdateTypes": ["digest"],
       "automerge": true,
-      "automergeType": "pr"
+      "automergeType": "pr",
+      "commitMessageTopic": "base image {{depName}}"
     },
     {
-      "description": "GitHub Actions patch/minor — auto-merge",
+      "description": "Platform base image version bumps — manual review",
+      "matchManagers": ["dockerfile"],
+      "matchPackagePatterns": ["^ghcr\\.io/platform-images/"],
+      "matchUpdateTypes": ["major", "minor", "patch"],
+      "automerge": false
+    },
+    {
+      "description": "GitHub Actions patch/minor/digest — auto-merge",
       "matchManagers": ["github-actions"],
       "matchUpdateTypes": ["minor", "patch", "digest"],
       "automerge": true,

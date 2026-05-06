@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 # Build stage — shell and npm available
-FROM ghcr.io/platform-images/nodejs-base:1.0.0 AS builder
+FROM ghcr.io/platform-images/nodejs-base:1.0.0@sha256:c894dd3a20d57013311dac55e476501f5f8388d52ab99ebf1d9106447ed13668 AS builder
 WORKDIR /app
 COPY package*.json ./
 RUN npm ci --only=production
