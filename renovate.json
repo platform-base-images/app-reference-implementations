@@ -13,8 +13,7 @@
     {
       "matchHost": "ghcr.io",
       "hostType": "docker",
-      "username": "x-access-token",
-      "password": "{{ secrets.RENOVATE_TOKEN }}"
+      "token": "{{ secrets.GITHUB_COM_TOKEN }}"
     }
   ],
   "packageRules": [
