@@ -1,0 +1,29 @@
+# Node
+node_modules/
+npm-debug.log*
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+dist/
+
+# Java / Maven
+target/
+*.class
+*.jar
+!apps/java-api/target/java-api-1.0.0.jar
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# CI artifacts
+*.sarif
+sbom.spdx.json

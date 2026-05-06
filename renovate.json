@@ -1,0 +1,60 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:base"],
+  "schedule": ["before 6am on Monday"],
+  "dependencyDashboard": true,
+  "dependencyDashboardTitle": "Renovate — Dependency Updates",
+  "dependencyDashboardApproval": false,
+  "commitMessagePrefix": "chore(deps): ",
+  "labels": ["renovate", "dependencies"],
+  "ignoreDeps": ["docker/dockerfile"],
+  "packageRules": [
+    {
+      "description": "Chainguard base image digest bumps — auto-merge",
+      "matchManagers": ["dockerfile"],
+      "matchPackagePatterns": ["^ghcr\\.io/platform-images/"],
+      "automerge": true,
+      "automergeType": "pr"
+    },
+    {
+      "description": "GitHub Actions patch/minor — auto-merge",
+      "matchManagers": ["github-actions"],
+      "matchUpdateTypes": ["minor", "patch", "digest"],
+      "automerge": true,
+      "automergeType": "pr"
+    },
+    {
+      "description": "GitHub Actions major — manual review",
+      "matchManagers": ["github-actions"],
+      "matchUpdateTypes": ["major"],
+      "automerge": false
+    },
+    {
+      "description": "npm patch/minor — auto-merge",
+      "matchManagers": ["npm"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "automerge": true,
+      "automergeType": "pr"
+    },
+    {
+      "description": "npm major — manual review",
+      "matchManagers": ["npm"],
+      "matchUpdateTypes": ["major"],
+      "automerge": false
+    },
+    {
+      "description": "pip patch/minor — auto-merge",
+      "matchManagers": ["pip_requirements"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "automerge": true,
+      "automergeType": "pr"
+    },
+    {
+      "description": "Maven patch/minor — auto-merge",
+      "matchManagers": ["maven"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "automerge": true,
+      "automergeType": "pr"
+    }
+  ]
+}
