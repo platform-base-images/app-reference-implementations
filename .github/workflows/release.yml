@@ -42,7 +42,7 @@ jobs:
       matrix:
         app: ${{ fromJSON(needs.setup.outputs.apps) }}
     env:
-      IMAGE: ghcr.io/platform-images/${{ matrix.app }}
+      IMAGE: ghcr.io/platform-base-images/${{ matrix.app }}
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
@@ -113,7 +113,7 @@ jobs:
             **Verify signature:**
             ```
             cosign verify \
-              --certificate-identity-regexp="https://github.com/platform-images/app-reference-implementations" \
+              --certificate-identity-regexp="https://github.com/platform-base-images/app-reference-implementations" \
               --certificate-oidc-issuer="https://token.actions.githubusercontent.com" \
               ${{ env.IMAGE }}@${{ steps.build.outputs.digest }}
             ```
