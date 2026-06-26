@@ -11,7 +11,7 @@
   "pinDigests": true,
   "prCreation": "immediate",
   "prHourlyLimit": 2,
-  "prConcurrentLimit": 5,
+  "prConcurrentLimit": 3,
   "packageRules": [
     {
       "description": "Platform base image digest bumps — auto-merge",
