@@ -1,15 +1,15 @@
 # app-reference-implementations
 
-Reference applications that consume the hardened base images from [platform-images/hardened-base](https://github.com/platform-images/hardened-base). Each app is a minimal but real service built with a multi-stage Dockerfile using the platform's distroless runtime images.
+Reference applications that consume the hardened base images from [platform-base-images/hardened-base](https://github.com/platform-base-images/hardened-base). Each app is a minimal but real service built with a multi-stage Dockerfile using the platform's distroless runtime images.
 
 ## Apps
 
 | App | Runtime | Base image | Port |
 |-----|---------|------------|------|
-| `nodejs-api` | Express 4 | `ghcr.io/platform-images/nodejs-base` | 3000 |
-| `python-api` | FastAPI + uvicorn | `ghcr.io/platform-images/python-base` | 8000 |
-| `java-api` | Spring Boot 3 | `ghcr.io/platform-images/openjdk-base` | 8080 |
-| `nginx-proxy` | nginx | `ghcr.io/platform-images/nginx-base` | 8080 |
+| `nodejs-api` | Express 4 | `ghcr.io/platform-base-images/nodejs-base` | 3000 |
+| `python-api` | FastAPI + uvicorn | `ghcr.io/platform-base-images/python-base` | 8000 |
+| `java-api` | Spring Boot 3 | `ghcr.io/platform-base-images/openjdk-base` | 8080 |
+| `nginx-proxy` | nginx | `ghcr.io/platform-base-images/nginx-base` | 8080 |
 
 Each app exposes:
 - `GET /health` — liveness check
@@ -25,13 +25,13 @@ Every app uses the same two-stage pattern:
 ```dockerfile
 # Build stage — toolchain available (npm, pip, mvn)
 # USER root overrides the nonroot default so package installs succeed
-FROM ghcr.io/platform-images/<runtime>-base:1.0.0@sha256:<digest> AS builder
+FROM ghcr.io/platform-base-images/<runtime>-base:1.0.0@sha256:<digest> AS builder
 USER root
 WORKDIR /app
 # ... install dependencies ...
 
 # Runtime stage — distroless, no shell, no package manager
-FROM ghcr.io/platform-images/<runtime>-base:1.0.0-distroless
+FROM ghcr.io/platform-base-images/<runtime>-base:1.0.0-distroless
 LABEL org.opencontainers.image.source="..."
 LABEL org.opencontainers.image.licenses="Apache-2.0"
 # ... copy built artefacts only ...
@@ -73,22 +73,22 @@ Go to **Actions → Release → Run workflow** and select the app (or `all`).
 ## Pulling an image
 
 ```bash
-docker pull ghcr.io/platform-images/nodejs-api:latest
-docker pull ghcr.io/platform-images/nodejs-api:sha-<git-sha>
+docker pull ghcr.io/platform-base-images/nodejs-api:latest
+docker pull ghcr.io/platform-base-images/nodejs-api:sha-<git-sha>
 ```
 
 ## Verifying a signed image
 
 ```bash
 cosign verify \
-  --certificate-identity-regexp="https://github.com/platform-images/app-reference-implementations" \
+  --certificate-identity-regexp="https://github.com/platform-base-images/app-reference-implementations" \
   --certificate-oidc-issuer="https://token.actions.githubusercontent.com" \
-  ghcr.io/platform-images/nodejs-api:latest
+  ghcr.io/platform-base-images/nodejs-api:latest
 ```
 
 ## Required secret
 
-The workflows pull base images from the private `platform-images/hardened-base` packages. Add a secret named `GHCR_TOKEN` to this repo — a classic PAT with `write:packages` scope.
+The workflows pull base images from the private `platform-base-images/hardened-base` packages. Add a secret named `GHCR_TOKEN` to this repo — a classic PAT with `write:packages` scope.
 
 Settings → Secrets and variables → Actions → New repository secret.
 

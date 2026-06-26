@@ -1,7 +1,7 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:base"],
-  "schedule": ["at any time"],
+  "schedule": ["before 6am on Monday"],
   "dependencyDashboard": true,
   "dependencyDashboardTitle": "Renovate — Dependency Updates",
   "dependencyDashboardApproval": false,
@@ -10,13 +10,13 @@
   "ignoreDeps": ["docker/dockerfile"],
   "pinDigests": true,
   "prCreation": "immediate",
-  "prHourlyLimit": 0,
-  "prConcurrentLimit": 0,
+  "prHourlyLimit": 2,
+  "prConcurrentLimit": 3,
   "packageRules": [
     {
       "description": "Platform base image digest bumps — auto-merge",
       "matchManagers": ["dockerfile"],
-      "matchPackagePatterns": ["^ghcr\\.io/platform-images/"],
+      "matchPackagePatterns": ["^ghcr\\.io/platform-base-images/"],
       "matchUpdateTypes": ["digest"],
       "automerge": true,
       "automergeType": "pr",
@@ -26,7 +26,7 @@
     {
       "description": "Platform base image version bumps — manual review",
       "matchManagers": ["dockerfile"],
-      "matchPackagePatterns": ["^ghcr\\.io/platform-images/"],
+      "matchPackagePatterns": ["^ghcr\\.io/platform-base-images/"],
       "matchUpdateTypes": ["major", "minor", "patch"],
       "automerge": false
     },
