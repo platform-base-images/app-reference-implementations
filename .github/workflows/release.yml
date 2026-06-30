@@ -3,7 +3,7 @@ name: Release
 on:
   push:
     branches: [main]
-    paths: ['apps/*/Dockerfile']
+    paths: ['apps/**']
   workflow_dispatch:
     inputs:
       app:
