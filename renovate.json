@@ -16,7 +16,7 @@
     {
       "description": "Platform base image digest bumps — auto-merge",
       "matchManagers": ["dockerfile"],
-      "matchPackagePatterns": ["^ghcr\\.io/platform-base-images/"],
+      "matchPackageNames": ["ghcr.io/platform-base-images/**"],
       "matchUpdateTypes": ["digest"],
       "automerge": true,
       "automergeType": "pr",
@@ -26,7 +26,7 @@
     {
       "description": "Platform base image version bumps — manual review",
       "matchManagers": ["dockerfile"],
-      "matchPackagePatterns": ["^ghcr\\.io/platform-base-images/"],
+      "matchPackageNames": ["ghcr.io/platform-base-images/**"],
       "matchUpdateTypes": ["major", "minor", "patch"],
       "automerge": false
     },
