@@ -52,7 +52,7 @@ jobs:
             --sarif-output=semgrep-${{ matrix.app }}.sarif || true
 
       - name: Upload SARIF
-        uses: github/codeql-action/upload-sarif@ff0a06e83cb2de871e5a09832bc6a81e7276941f # v3.28.18
+        uses: github/codeql-action/upload-sarif@dd903d2e4f5405488e5ef1422510ee31c8b32357 # v3.36.2
         with:
           sarif_file: semgrep-${{ matrix.app }}.sarif
           category: semgrep-${{ matrix.app }}
