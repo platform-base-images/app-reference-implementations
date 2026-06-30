@@ -10,7 +10,7 @@
   "ignoreDeps": ["docker/dockerfile"],
   "pinDigests": true,
   "prCreation": "immediate",
-  "prHourlyLimit": 2,
+  "prHourlyLimit": 5,
   "prConcurrentLimit": 3,
   "packageRules": [
     {
