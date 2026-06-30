@@ -14,20 +14,11 @@
   "prConcurrentLimit": 3,
   "packageRules": [
     {
-      "description": "Platform base image digest bumps — auto-merge",
+      "description": "Platform base images — group all updates into one PR",
       "matchManagers": ["dockerfile"],
       "matchPackageNames": ["ghcr.io/platform-base-images/**"],
-      "matchUpdateTypes": ["digest"],
-      "automerge": true,
-      "automergeType": "pr",
-      "platformAutomerge": true,
-      "commitMessageTopic": "base image {{depName}}"
-    },
-    {
-      "description": "Platform base image version bumps — manual review",
-      "matchManagers": ["dockerfile"],
-      "matchPackageNames": ["ghcr.io/platform-base-images/**"],
-      "matchUpdateTypes": ["major", "minor", "patch"],
+      "groupName": "platform base images",
+      "commitMessageTopic": "platform base images",
       "automerge": false
     },
     {
