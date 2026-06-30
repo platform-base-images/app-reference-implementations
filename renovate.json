@@ -14,7 +14,14 @@
   "prConcurrentLimit": 3,
   "packageRules": [
     {
-      "description": "Platform base images — group all updates into one PR",
+      "description": "Platform base images distroless runtime tags — skip (causes group collision)",
+      "matchManagers": ["dockerfile"],
+      "matchPackageNames": ["ghcr.io/platform-base-images/**"],
+      "matchCurrentValue": "/.+-distroless.*/",
+      "enabled": false
+    },
+    {
+      "description": "Platform base images — group all builder-stage updates into one PR",
       "matchManagers": ["dockerfile"],
       "matchPackageNames": ["ghcr.io/platform-base-images/**"],
       "groupName": "platform base images",

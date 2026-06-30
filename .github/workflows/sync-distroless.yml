@@ -1,0 +1,54 @@
+name: Sync distroless tags
+
+# Runs whenever Renovate updates the grouped base-image branch.
+# Renovate only updates the builder FROM lines (digest-pinned); this workflow
+# reads the new semver from each builder stage and writes the matching
+# distroless tag into the same Dockerfile so both stages stay in sync.
+
+on:
+  push:
+    branches:
+      - 'renovate/platform-base-images'
+
+permissions:
+  contents: write
+
+jobs:
+  sync-distroless:
+    name: Sync distroless runtime tags
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          token: ${{ secrets.PLATFORM_TOKEN }}
+          ref: renovate/platform-base-images
+
+      - name: Update distroless tags to match builder version
+        run: |
+          set -euo pipefail
+
+          for dockerfile in apps/java-api/Dockerfile apps/nodejs-api/Dockerfile apps/python-api/Dockerfile; do
+            # Image name (e.g. python-base) from the first builder FROM line
+            image=$(grep -m1 '^FROM ghcr\.io/platform-base-images/' "$dockerfile" \
+              | sed 's|FROM ghcr\.io/platform-base-images/\([^:]*\):.*|\1|')
+
+            # Semver (e.g. 1.0.3) — the part before the @sha256 digest
+            version=$(grep -m1 '^FROM ghcr\.io/platform-base-images/' "$dockerfile" \
+              | grep -oP '\d+\.\d+\.\d+(?=@)')
+
+            [ -z "$version" ] && continue
+
+            sed -i \
+              "s|ghcr\.io/platform-base-images/${image}:[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*-distroless|ghcr.io/platform-base-images/${image}:${version}-distroless|g" \
+              "$dockerfile"
+
+            echo "  ${dockerfile}: ${image}:${version}-distroless"
+          done
+
+          git diff --quiet && echo "Distroless tags already in sync." && exit 0
+
+          git config user.name "platform-images"
+          git config user.email "platform-images@users.noreply.github.com"
+          git add apps/*/Dockerfile
+          git commit -m "chore: sync distroless runtime tags to match builder version"
+          git push
