@@ -47,9 +47,9 @@ jobs:
 
       - name: Run Semgrep
         run: |
-          pip install semgrep --quiet
+          pip install semgrep==1.168.0 --quiet
           semgrep scan --config=auto --error apps/${{ matrix.app }} \
-            --sarif-output=semgrep-${{ matrix.app }}.sarif || true
+            --sarif-output=semgrep-${{ matrix.app }}.sarif
 
       - name: Upload SARIF
         uses: github/codeql-action/upload-sarif@ff0a06e83cb2de871e5a09832bc6a81e7276941f # v3.28.18
