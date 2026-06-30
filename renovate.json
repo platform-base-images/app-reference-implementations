@@ -11,7 +11,7 @@
   "pinDigests": true,
   "prCreation": "immediate",
   "prHourlyLimit": 5,
-  "prConcurrentLimit": 3,
+  "prConcurrentLimit": 10,
   "packageRules": [
     {
       "description": "Platform base images distroless runtime tags — skip (causes group collision)",
