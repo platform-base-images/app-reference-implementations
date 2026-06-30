@@ -9,7 +9,7 @@ COPY src/ ./src/
 RUN mvn package -DskipTests -q
 
 # Runtime stage — no shell, no Maven
-FROM ghcr.io/platform-base-images/openjdk-base:1.0.5-distroless
+FROM ghcr.io/platform-base-images/openjdk-base:1.0.6-distroless
 ARG BUILD_DATE
 ARG GIT_REVISION
 LABEL org.opencontainers.image.source="https://github.com/platform-base-images/app-reference-implementations"
