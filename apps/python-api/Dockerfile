@@ -1,13 +1,13 @@
 # syntax=docker/dockerfile:1
 # Build stage — pip available
-FROM ghcr.io/platform-base-images/python-base:1.0.0@sha256:b67d1344e2bfaf0c79fe44d95ad4c8fe365aa23bf7a27445eabab5fe0b033b67 AS builder
+FROM ghcr.io/platform-base-images/python-base:1.0.2@sha256:48a49e39f59cda75eb5b73b7228f54a52149756c8810d7d1b835f2bb56d23187 AS builder
 USER root
 WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir --target=/app/packages -r requirements.txt
 
 # Runtime stage — no shell, no pip
-FROM ghcr.io/platform-base-images/python-base:1.0.0-distroless
+FROM ghcr.io/platform-base-images/python-base:1.0.2-distroless
 ARG BUILD_DATE
 ARG GIT_REVISION
 LABEL org.opencontainers.image.source="https://github.com/platform-base-images/app-reference-implementations"
