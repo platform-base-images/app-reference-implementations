@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 # Build stage — pip available
-FROM ghcr.io/platform-base-images/python-base:1.0.4@sha256:fe7742c15d0476735df93515cb1085722c8982e81f9f583b8a4f4d2149a1811c AS builder
+FROM ghcr.io/platform-base-images/python-base:1.0.5@sha256:79a22b3673a6a9a06ca8e24be49ec6a3a63f0352e09702692049847944959201 AS builder
 USER root
 WORKDIR /app
 COPY requirements.txt .
