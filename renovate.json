@@ -73,6 +73,12 @@
       "matchUpdateTypes": ["minor", "patch"],
       "automerge": true,
       "automergeType": "pr"
+    },
+    {
+      "description": "Maven major — require dashboard approval before opening PR",
+      "matchManagers": ["maven"],
+      "matchUpdateTypes": ["major"],
+      "dependencyDashboardApproval": true
     }
   ]
 }
