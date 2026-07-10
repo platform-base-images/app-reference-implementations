@@ -7,7 +7,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir --target=/app/packages -r requirements.txt
 
 # Runtime stage — no shell, no pip
-FROM ghcr.io/platform-base-images/python-base:1.0.5-distroless
+FROM ghcr.io/platform-base-images/python-base:1.0.5-distroless@sha256:6ad91d302bcec1355ca940f02b45164bd2cc60d2e8403f0577e5aa50d3e4256a
 ARG BUILD_DATE
 ARG GIT_REVISION
 LABEL org.opencontainers.image.source="https://github.com/platform-base-images/app-reference-implementations"
