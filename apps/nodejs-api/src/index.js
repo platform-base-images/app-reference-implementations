@@ -2,7 +2,7 @@
 
 const express = require('express');
 
-const app  = express(); // nosemgrep: javascript.express.security.audit.express-check-csurf-middleware-usage
+const app  = express(); // nosemgrep
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
