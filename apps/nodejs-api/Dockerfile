@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 # Build stage — shell and npm available
-FROM ghcr.io/platform-base-images/nodejs-base:1.0.4@sha256:b723e7e7d5f2fcf46383a991daaecb415e0e0d95484031c08af0f0b7029f8555 AS builder
+FROM ghcr.io/platform-base-images/nodejs-base:1.0.9@sha256:df7adfc0928a6970a95a8f32f2ed22fe3650793deb243a4c091c62faf86de26e AS builder
 USER root
 WORKDIR /app
 COPY package*.json ./
@@ -8,7 +8,7 @@ RUN npm ci --omit=dev
 USER nonroot
 
 # Runtime stage — no shell, minimal attack surface
-FROM ghcr.io/platform-base-images/nodejs-base:1.0.4-distroless@sha256:039947d9a79cadc14d0b382f426af7ea4a58ac846840a6f44994d8342be6b1b7
+FROM ghcr.io/platform-base-images/nodejs-base:1.0.9-distroless@sha256:fe2c1723da8c9623e5b87100bb9990ef24b9dc9b4a8f5caf336887a26edb94a9
 ARG BUILD_DATE
 ARG GIT_REVISION
 LABEL org.opencontainers.image.source="https://github.com/platform-base-images/app-reference-implementations"
