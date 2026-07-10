@@ -1,0 +1,66 @@
+name: Renovate Auto-merge
+
+# Approves Renovate PRs on the bot's behalf so GitHub's required-reviewer
+# gate is satisfied without blocking automated patch/minor/digest updates.
+# The actual merge is deferred to Renovate's own auto-merge logic, which only
+# triggers for packages where automerge: true is configured — major updates
+# (automerge: false) are approved here but still need a human to click merge.
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  pull-requests: write
+  contents: write
+
+jobs:
+  approve:
+    name: Approve Renovate PR
+    runs-on: ubuntu-latest
+    if: |
+      github.actor == 'renovate[bot]' ||
+      github.actor == 'renovate-release[bot]'
+    steps:
+      - name: Validate changed files
+        id: validate
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        with:
+          script: |
+            const { data: files } = await github.rest.pulls.listFiles({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number,
+            });
+
+            // Only approve when the diff touches expected dependency files.
+            // Anything outside this list (source code, workflows, configs) needs
+            // a human reviewer.
+            const allowed = /^(apps\/[^/]+\/(Dockerfile[^/]*|package[^/]*\.json|requirements[^/]*\.(txt|in)|pom\.xml)|renovate\.json)$/;
+            const unexpected = files
+              .map(f => f.filename)
+              .filter(f => !allowed.test(f));
+
+            if (unexpected.length > 0) {
+              core.warning(`Unexpected files changed: ${unexpected.join(', ')} — skipping auto-approval, manual review required`);
+              core.setOutput('safe', 'false');
+            } else {
+              core.setOutput('safe', 'true');
+            }
+
+      - name: Approve PR
+        if: steps.validate.outputs.safe == 'true'
+        run: |
+          gh pr review --approve "$PR_URL" \
+            --body "Automated approval: Renovate-managed dependency update touching only expected files. All CI security gates (Trivy, SAST, SCA, TruffleHog) must pass before merge."
+        env:
+          GH_TOKEN: ${{ secrets.PLATFORM_TOKEN }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+
+      - name: Summarize
+        run: |
+          if [[ "${{ steps.validate.outputs.safe }}" == "true" ]]; then
+            echo "PR approved. Will merge automatically once all required status checks pass (if automerge is enabled for this package)."
+          else
+            echo "Unexpected file changes — manual review required."
+          fi
