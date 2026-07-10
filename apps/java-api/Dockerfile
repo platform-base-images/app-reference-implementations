@@ -7,6 +7,7 @@ COPY pom.xml .
 RUN mvn dependency:go-offline -q
 COPY src/ ./src/
 RUN mvn package -DskipTests -q
+USER nonroot
 
 # Runtime stage — no shell, no Maven
 FROM ghcr.io/platform-base-images/openjdk-base:1.0.6-distroless@sha256:24d0563b593882a81233558844ddb9e981e1dc2ff6f742fe6ed7cdabd0f0b57a

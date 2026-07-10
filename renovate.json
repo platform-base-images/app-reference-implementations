@@ -55,6 +55,12 @@
       "automerge": false
     },
     {
+      "description": "pydantic-core is a transitive dep pinned exactly by pydantic — skip direct updates",
+      "matchManagers": ["pip_requirements"],
+      "matchPackageNames": ["pydantic-core"],
+      "enabled": false
+    },
+    {
       "description": "pip patch/minor — auto-merge",
       "matchManagers": ["pip_requirements"],
       "matchUpdateTypes": ["minor", "patch"],
