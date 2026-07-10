@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api")
 public class ItemController {
 
     @GetMapping("/health")
@@ -15,7 +14,7 @@ public class ItemController {
         return Map.of("status", "ok", "service", "java-api");
     }
 
-    @GetMapping("/items")
+    @GetMapping("/api/items")
     public List<Map<String, Object>> listItems() {
         return List.of(
             Map.of("id", 1, "name", "item-1", "description", "First item"),
@@ -23,7 +22,7 @@ public class ItemController {
         );
     }
 
-    @GetMapping("/items/{id}")
+    @GetMapping("/api/items/{id}")
     public ResponseEntity<?> getItem(@PathVariable int id) {
         if (id < 1 || id > 2) {
             return ResponseEntity.notFound().build();
