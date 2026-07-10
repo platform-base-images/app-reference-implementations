@@ -59,9 +59,7 @@ jobs:
 
           gh pr create \
             --title "chore: pin distroless runtime stages to digest" \
-            --body "Adds @sha256 digest pins to the distroless runtime FROM lines in all three app Dockerfiles. Previously only the builder stages were digest-pinned; this brings the runtime stages to the same level.
-
-After this PR merges, future digest updates are handled automatically by the sync-distroless workflow on every Renovate base-image PR." \
+            --body $'Adds @sha256 digest pins to the distroless runtime FROM lines in all three app Dockerfiles. Previously only the builder stages were digest-pinned; this brings the runtime stages to the same level.\n\nAfter this PR merges, future digest updates are handled automatically by the sync-distroless workflow on every Renovate base-image PR.' \
             --base main \
             --head "$BRANCH"
         env:
