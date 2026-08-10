@@ -34,7 +34,11 @@ jobs:
             --username x-access-token \
             --password "${{ secrets.PLATFORM_TOKEN }}"
 
-          for dockerfile in apps/java-api/Dockerfile apps/nodejs-api/Dockerfile apps/python-api/Dockerfile; do
+          # Only java-api still has a distroless runtime stage — nodejs-base and
+          # python-base dropped theirs (Chainguard's distroless builds for both
+          # were stuck on unpatched CVEs with no shell to work around it; see
+          # platform-base-images/hardened-base). Don't add them back here.
+          for dockerfile in apps/java-api/Dockerfile; do
             # Image name (e.g. python-base) from the first builder FROM line
             image=$(grep -m1 '^FROM ghcr\.io/platform-base-images/' "$dockerfile" \
               | sed 's|FROM ghcr\.io/platform-base-images/\([^:]*\):.*|\1|')
