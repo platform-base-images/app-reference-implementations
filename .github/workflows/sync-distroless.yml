@@ -1,17 +1,27 @@
 name: Sync distroless tags
 
-# Runs whenever Renovate updates the grouped base-image branch.
-# Renovate only updates the builder FROM lines (digest-pinned); this workflow
-# reads the new semver from each builder stage and writes the matching
-# distroless tag into the same Dockerfile so both stages stay in sync.
+# Runs after a base-image bump lands on main (Renovate's builder-stage-only PR
+# merging, most likely). Reads the new semver from the builder FROM line and
+# opens a small follow-up PR updating the matching distroless runtime tag —
+# renovate.json explicitly disables Renovate's own tracking of *-distroless
+# tags ("causes group collision"), so this workflow is what keeps them synced.
+#
+# This intentionally does NOT push onto any renovate/* branch. Renovate treats
+# any commit it didn't author as a manual edit and permanently stops managing
+# that branch (see the incident this comment is replacing) — pushing here
+# only ever targets main and this workflow's own throwaway branch, so the two
+# automations never touch the same ref.
 
 on:
   push:
     branches:
-      - 'renovate/platform-base-images'
+      - main
+    paths:
+      - 'apps/java-api/Dockerfile'
 
 permissions:
   contents: write
+  pull-requests: write
 
 jobs:
   sync-distroless:
@@ -21,7 +31,6 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           token: ${{ secrets.PLATFORM_TOKEN }}
-          ref: renovate/platform-base-images
 
       - name: Install crane
         uses: imjasonh/setup-crane@feee3b6bb0d4c68370f256a4502498c9227e5c6b # v0.7
@@ -65,6 +74,17 @@ jobs:
 
           git config user.name "platform-images"
           git config user.email "platform-images@users.noreply.github.com"
+
+          BRANCH="chore/sync-distroless-digest-$(date +%Y%m%d%H%M%S)"
+          git checkout -b "$BRANCH"
           git add apps/*/Dockerfile
           git commit -m "chore: sync distroless runtime tags to match builder version"
-          git push
+          git push origin "$BRANCH"
+
+          gh pr create \
+            --title "chore: sync distroless runtime tags to match builder version" \
+            --body "Follows up on the base-image bump that just merged to main — updates java-api's distroless runtime FROM line to the matching version/digest." \
+            --base main \
+            --head "$BRANCH"
+        env:
+          GH_TOKEN: ${{ secrets.PLATFORM_TOKEN }}
