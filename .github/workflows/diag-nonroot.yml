@@ -1,0 +1,34 @@
+name: Diagnose missing nonroot user
+
+on:
+  workflow_dispatch:
+
+jobs:
+  diag:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: imjasonh/setup-crane@feee3b6bb0d4c68370f256a4502498c9227e5c6b # v0.7
+
+      - name: Auth
+        run: crane auth login ghcr.io --username x-access-token --password "${{ secrets.PLATFORM_TOKEN }}"
+
+      - name: Inspect openjdk-base distroless config
+        run: |
+          echo "=== crane config (User field etc) ==="
+          crane config ghcr.io/platform-base-images/openjdk-base:1.0.23-distroless | jq '{User: .config.User, Entrypoint: .config.Entrypoint, Cmd: .config.Cmd}'
+
+      - name: Extract /etc/passwd from the image
+        run: |
+          set -euo pipefail
+          crane export ghcr.io/platform-base-images/openjdk-base:1.0.23-distroless - | tar -x etc/passwd -O || echo "COULD NOT EXTRACT /etc/passwd"
+
+      - name: For comparison — same check on the standard (non-distroless) openjdk-base
+        run: |
+          echo "=== standard variant config ==="
+          crane config ghcr.io/platform-base-images/openjdk-base:1.0.23 | jq '{User: .config.User}'
+          crane export ghcr.io/platform-base-images/openjdk-base:1.0.23 - | tar -x etc/passwd -O || echo "COULD NOT EXTRACT /etc/passwd"
+
+      - name: For comparison — chainguard/jre directly (upstream base)
+        run: |
+          echo "=== upstream chainguard/jre config ==="
+          crane config cgr.dev/chainguard/jre:latest | jq '{User: .config.User}' || echo "could not read (may need different auth for cgr.dev)"
