@@ -1,14 +1,17 @@
 # syntax=docker/dockerfile:1
 # Build stage — shell and npm available
-FROM ghcr.io/platform-base-images/nodejs-base:1.0.9@sha256:df7adfc0928a6970a95a8f32f2ed22fe3650793deb243a4c091c62faf86de26e AS builder
+FROM ghcr.io/platform-base-images/nodejs-base:1.0.13@sha256:19a39c5be35df16ea66a5db5d01c5d11c2c3203daaaada1fb1af756bab77fe3d AS builder
 USER root
 WORKDIR /app
 COPY package*.json ./
 RUN npm ci --omit=dev
 USER nonroot
 
-# Runtime stage — no shell, minimal attack surface
-FROM ghcr.io/platform-base-images/nodejs-base:1.0.9-distroless@sha256:fe2c1723da8c9623e5b87100bb9990ef24b9dc9b4a8f5caf336887a26edb94a9
+# Runtime stage — nodejs-base has no distroless variant currently (Chainguard's
+# distroless node image was stuck on an unpatched libnghttp2/npm with no shell to
+# work around it; see platform-base-images/hardened-base). Using the standard
+# variant here instead.
+FROM ghcr.io/platform-base-images/nodejs-base:1.0.13@sha256:19a39c5be35df16ea66a5db5d01c5d11c2c3203daaaada1fb1af756bab77fe3d
 ARG BUILD_DATE
 ARG GIT_REVISION
 LABEL org.opencontainers.image.source="https://github.com/platform-base-images/app-reference-implementations"
@@ -19,4 +22,4 @@ WORKDIR /app
 COPY --from=builder /app/node_modules ./node_modules
 COPY src/ ./src/
 EXPOSE 3000
-CMD ["src/index.js"]
+CMD ["node", "src/index.js"]
