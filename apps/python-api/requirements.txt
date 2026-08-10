@@ -8,7 +8,7 @@ click==8.4.2
     # via uvicorn
 colorama==0.4.6
     # via click
-fastapi==0.139.0
+fastapi==0.141.1
     # via -r requirements.in
 h11==0.16.0
     # via uvicorn
