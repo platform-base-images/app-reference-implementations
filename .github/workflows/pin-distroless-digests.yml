@@ -27,7 +27,11 @@ jobs:
             --username x-access-token \
             --password "${{ secrets.PLATFORM_TOKEN }}"
 
-          for dockerfile in apps/java-api/Dockerfile apps/nodejs-api/Dockerfile apps/python-api/Dockerfile; do
+          # Only java-api still has a distroless runtime stage — nodejs-base and
+          # python-base dropped theirs (Chainguard's distroless builds for both
+          # were stuck on unpatched CVEs with no shell to work around it; see
+          # platform-base-images/hardened-base). Don't add them back here.
+          for dockerfile in apps/java-api/Dockerfile; do
             image=$(grep -m1 '^FROM ghcr\.io/platform-base-images/' "$dockerfile" \
               | sed 's|FROM ghcr\.io/platform-base-images/\([^:]*\):.*|\1|')
 
@@ -59,7 +63,7 @@ jobs:
 
           gh pr create \
             --title "chore: pin distroless runtime stages to digest" \
-            --body $'Adds @sha256 digest pins to the distroless runtime FROM lines in all three app Dockerfiles. Previously only the builder stages were digest-pinned; this brings the runtime stages to the same level.\n\nAfter this PR merges, future digest updates are handled automatically by the sync-distroless workflow on every Renovate base-image PR.' \
+            --body $'Adds an @sha256 digest pin to java-api\'s distroless runtime FROM line (the only app with a distroless runtime stage — nodejs-base and python-base have no distroless variant currently). Previously only the builder stage was digest-pinned; this brings the runtime stage to the same level.\n\nAfter this PR merges, future digest updates are handled automatically by the sync-distroless workflow on every Renovate base-image PR.' \
             --base main \
             --head "$BRANCH"
         env:

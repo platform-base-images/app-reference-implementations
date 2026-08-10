@@ -1,6 +1,6 @@
 # app-reference-implementations
 
-Reference applications that consume the hardened base images from [platform-base-images/hardened-base](https://github.com/platform-base-images/hardened-base). Each app is a minimal but real service built with a multi-stage Dockerfile using the platform's distroless runtime images.
+Reference applications that consume the hardened base images from [platform-base-images/hardened-base](https://github.com/platform-base-images/hardened-base). Each app is a minimal but real service built with a multi-stage Dockerfile. `java-api` uses the platform's distroless runtime image for its final stage; `nodejs-api` and `python-api` use the standard runtime image (their base images have no distroless variant — see `hardened-base`'s README).
 
 ## Apps
 
@@ -20,7 +20,7 @@ The nginx-proxy routes `/nodejs/`, `/python/`, `/java/` to the upstream services
 
 ## Dockerfile pattern
 
-Every app uses the same two-stage pattern:
+Every app uses the same two-stage shape — a builder stage with the toolchain, then a minimal runtime stage. Only `java-api`'s runtime stage is distroless; `nodejs-api` and `python-api` use the standard runtime image since their base images don't currently ship a distroless variant:
 
 ```dockerfile
 # Build stage — toolchain available (npm, pip, mvn)
@@ -30,8 +30,9 @@ USER root
 WORKDIR /app
 # ... install dependencies ...
 
-# Runtime stage — distroless, no shell, no package manager
-FROM ghcr.io/platform-base-images/<runtime>-base:1.0.0-distroless
+# Runtime stage — java-api: distroless (no shell, no package manager)
+#                 nodejs-api / python-api: standard variant, same tag as builder
+FROM ghcr.io/platform-base-images/<runtime>-base:1.0.0[-distroless]
 LABEL org.opencontainers.image.source="..."
 LABEL org.opencontainers.image.licenses="Apache-2.0"
 # ... copy built artefacts only ...
