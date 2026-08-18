@@ -12,7 +12,7 @@ fastapi==0.141.1
     # via -r requirements.in
 h11==0.16.0
     # via uvicorn
-idna==3.18
+idna==3.19
     # via anyio
 pydantic==2.13.4
     # via fastapi
