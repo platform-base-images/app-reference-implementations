@@ -1,0 +1,17 @@
+# CVE-2025-47273 — setuptools path traversal via PackageIndex/easy_install's
+# download-to-tmp-then-extract flow. Present in the OS-level setuptools bundled
+# by ghcr.io/platform-base-images/python-base, including the latest available
+# release (1.0.15) as of 2026-08-31 — no patched base image exists yet.
+# Not exploitable here: python-api only runs `pip install -r requirements.txt`
+# against a fully pinned lockfile at build time; nothing in the app or its
+# runtime invokes setuptools' package-download/extraction path.
+# Tracked upstream in platform-base-images/hardened-base. Remove this line once
+# a python-base release without this finding is available.
+CVE-2025-47273
+
+# GHSA-6v7p-g79w-8964 — msgpack out-of-bounds read/crash on Unpacker reuse
+# after an error. Same situation: an OS-level python package bundled by
+# python-base (installed 1.1.2, fixed 1.2.1), not a dependency of python-api
+# (msgpack does not appear in requirements.txt) and not imported by the app.
+# Tracked upstream in platform-base-images/hardened-base; remove once fixed.
+GHSA-6v7p-g79w-8964
