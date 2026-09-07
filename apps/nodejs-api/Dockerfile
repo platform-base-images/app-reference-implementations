@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 # Build stage — shell and npm available
-FROM ghcr.io/platform-base-images/nodejs-base:1.0.15@sha256:7027f0012853e403deab54470ca162a6613b2bd0d62ffabfd8f06e795c96b89a AS builder
+FROM ghcr.io/platform-base-images/nodejs-base:1.0.16@sha256:471ae743532650016494b8d394e4b8b87a93f209f47add24b8045b3d6ea630e0 AS builder
 USER root
 WORKDIR /app
 COPY package*.json ./
@@ -11,7 +11,7 @@ USER nonroot
 # distroless node image was stuck on an unpatched libnghttp2/npm with no shell to
 # work around it; see platform-base-images/hardened-base). Using the standard
 # variant here instead.
-FROM ghcr.io/platform-base-images/nodejs-base:1.0.15@sha256:7027f0012853e403deab54470ca162a6613b2bd0d62ffabfd8f06e795c96b89a
+FROM ghcr.io/platform-base-images/nodejs-base:1.0.16@sha256:471ae743532650016494b8d394e4b8b87a93f209f47add24b8045b3d6ea630e0
 ARG BUILD_DATE
 ARG GIT_REVISION
 LABEL org.opencontainers.image.source="https://github.com/platform-base-images/app-reference-implementations"
