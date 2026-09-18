@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 # Build stage — Maven available
-FROM ghcr.io/platform-base-images/openjdk-base:1.0.30@sha256:b24edb0c83c13e0211d569dd3532df6d12a95ae48a42d3684b492fec27a2422b AS builder
+FROM ghcr.io/platform-base-images/openjdk-base:1.0.31@sha256:72e387ce3b124ff4fe5be3133da1f6bfc4fc2559f9254b30fff1fa4a7d8adc4b AS builder
 USER root
 WORKDIR /app
 COPY pom.xml .
