@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 # Build stage — pip available
-FROM ghcr.io/platform-base-images/python-base:1.0.17@sha256:c737db3a8f315ed6dfedce6bd40539ccca3696d826cb8876339284090e309965 AS builder
+FROM ghcr.io/platform-base-images/python-base:1.0.18@sha256:f358c1b6779c6bf649e7d8946ad3b307c1a617f25d76875b7599fca09d5a3a03 AS builder
 USER root
 WORKDIR /app
 COPY requirements.txt .
@@ -11,7 +11,7 @@ USER nonroot
 # distroless python image was stuck on an unpatched python-3.14 with no shell to
 # work around it; see platform-base-images/hardened-base). Using the standard
 # variant here instead.
-FROM ghcr.io/platform-base-images/python-base:1.0.17@sha256:c737db3a8f315ed6dfedce6bd40539ccca3696d826cb8876339284090e309965
+FROM ghcr.io/platform-base-images/python-base:1.0.18@sha256:f358c1b6779c6bf649e7d8946ad3b307c1a617f25d76875b7599fca09d5a3a03
 ARG BUILD_DATE
 ARG GIT_REVISION
 LABEL org.opencontainers.image.source="https://github.com/platform-base-images/app-reference-implementations"
