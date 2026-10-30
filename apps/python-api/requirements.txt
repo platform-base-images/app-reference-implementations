@@ -18,7 +18,7 @@ h11==0.16.0
     # via uvicorn
 idna==3.20
     # via anyio
-pydantic==2.14.0
+pydantic==2.14.2
     # via fastapi
 pydantic-core==2.50.0
     # via pydantic
