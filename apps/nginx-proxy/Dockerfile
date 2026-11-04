@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM ghcr.io/platform-base-images/nginx-base:1.0.18@sha256:4b36dfcd1c2dd8d86cc284e1faf258fb48dba0c664ead82f7201842bcd840b39
+FROM ghcr.io/platform-base-images/nginx-base:1.0.23@sha256:6312d9bc1027f12f01c8aad772737580f7990ec42fd942798913fc1d4b8bdf03
 ARG BUILD_DATE
 ARG GIT_REVISION
 LABEL org.opencontainers.image.source="https://github.com/platform-base-images/app-reference-implementations"
