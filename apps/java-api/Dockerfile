@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 # Build stage — Maven available
-FROM ghcr.io/platform-base-images/openjdk-base:1.0.36@sha256:be22f9be5c1e8b9d84c670fb74655833dd63339ab2fb9e6adc7ca3257106d75a AS builder
+FROM ghcr.io/platform-base-images/openjdk-base:1.0.39@sha256:950d1f137b36e3602e6ca89e2f8edd10712ebafe2d2cf4d95a17bbea22579527 AS builder
 USER root
 WORKDIR /app
 COPY pom.xml .
@@ -10,7 +10,7 @@ RUN mvn package -DskipTests -q
 USER nonroot
 
 # Runtime stage — no shell, no Maven
-FROM ghcr.io/platform-base-images/openjdk-base:1.0.36-distroless@sha256:e9176c8f2de627354b6d68b0c9c8a4863f15cd8f935929acd5cc4d91a360d18b
+FROM ghcr.io/platform-base-images/openjdk-base:1.0.39-distroless@sha256:bf63eee48242124756272fdb4b6658b197ce8e70656e6117ac162bdfc285d933
 ARG BUILD_DATE
 ARG GIT_REVISION
 LABEL org.opencontainers.image.source="https://github.com/platform-base-images/app-reference-implementations"
