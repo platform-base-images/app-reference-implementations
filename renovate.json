@@ -12,6 +12,18 @@
   "prCreation": "immediate",
   "prHourlyLimit": 5,
   "prConcurrentLimit": 10,
+  "pip_requirements": {
+    "enabled": false
+  },
+  "pip-compile": {
+    "managerFilePatterns": ["/(^|/)requirements\\.txt$/"],
+    "lockFileMaintenance": {
+      "enabled": true,
+      "schedule": ["before 6am on monday"],
+      "automerge": true,
+      "automergeType": "pr"
+    }
+  },
   "packageRules": [
     {
       "description": "Platform base images distroless runtime tags — skip (causes group collision)",
@@ -55,15 +67,8 @@
       "automerge": false
     },
     {
-      "description": "pydantic pins pydantic-core to an exact version — update both in one PR so they stay in sync",
-      "matchManagers": ["pip_requirements"],
-      "matchPackageNames": ["pydantic", "pydantic-core"],
-      "groupName": "pydantic",
-      "commitMessageTopic": "pydantic"
-    },
-    {
       "description": "pip patch/minor — auto-merge",
-      "matchManagers": ["pip_requirements"],
+      "matchManagers": ["pip-compile"],
       "matchUpdateTypes": ["minor", "patch"],
       "automerge": true,
       "automergeType": "pr"
